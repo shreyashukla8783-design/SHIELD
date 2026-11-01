@@ -223,11 +223,11 @@ if (registerLocation) {
   // =========================
   // DEVIATION CHECK
   // =========================
-
-  const isDeviated =
-    safeRoute.length > 0 &&
-    deviationDistance !== null &&
-    deviationDistance > 100;
+  
+const isDeviated =
+  safeRoute.length > 0 &&
+  deviationDistance !== null &&
+  deviationDistance >= 0;
 
   // =========================
   // SOS COUNTDOWN
