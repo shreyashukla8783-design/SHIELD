@@ -312,35 +312,53 @@ function RouteTracker({ registerSOS }) {
   };
 
   // SEND SOS MESSAGE
-  const sendSOS = () => {
-    if (!emergencyContact) {
-      alert("Please add an emergency contact first.");
-      return;
+  const sendSOS = async () => {
+  if (!emergencyContact) {
+    alert("Please add an emergency contact first.");
+    return;
+  }
+
+  if (!location) {
+    alert("Current location is not available.");
+    return;
+  }
+
+  const locationLink =
+    `https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
+
+  const message =
+    `SHIELD EMERGENCY ALERT\n\n` +
+    `The user needs a safety check.\n\n` +
+    `Last known location:\n${locationLink}\n\n` +
+    `Please contact the user.`;
+
+  try {
+    const response = await fetch(
+      "https://shield-backend-4uly.onrender.com/send-sos"
+      ,{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phone: emergencyContact.phone,
+          message: message,
+        }),
+      }
+    );
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert("SOS message sent successfully!");
+    } else {
+      alert("SOS failed: " + result.message);
     }
-
-    if (!location) {
-      alert("Current location is not available.");
-      return;
-    }
-
-    const latitude = location.latitude;
-    const longitude = location.longitude;
-
-    const locationLink =
-      `https://www.google.com/maps?q=${latitude},${longitude}`;
-      
-
-    const message =
-      `SHIELD EMERGENCY ALERT\n\n` +
-      `The user needs a safety check.\n\n` +
-      `Last known location:\n${locationLink}\n\n` +
-      `Please contact the user.`;
-
-    const smsUrl =
-      `sms:${emergencyContact.phone}?body=${encodeURIComponent(message)}`;
-
-    window.location.href = smsUrl;
-  };
+  } catch (error) {
+    console.error("SOS Error:", error);
+    alert("Cannot connect to SHIELD server.");
+  }
+};
   useEffect(() => {
   if (registerSOS) {
     registerSOS(() => sendSOS);

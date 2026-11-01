@@ -31,7 +31,7 @@ app.post("/send-sos", async (req, res) => {
     }
 
     const sms = await client.messages.create({
-  body: message,
+  body: "sms_internal_alerts",
   from: process.env.TWILIO_PHONE_NUMBER,
   to: phone,
 });
