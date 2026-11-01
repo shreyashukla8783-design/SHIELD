@@ -138,7 +138,9 @@ function RouteTracker({ registerSOS, registerLocation }) {
               new Date().toLocaleTimeString(),
           };
 
-          console.log("GPS LOCATION:", newLocation);
+          setLocation(newLocation);
+
+console.log("GPS LOCATION:", newLocation);
 
 if (registerLocation) {
   console.log("Sending location to App.jsx");
