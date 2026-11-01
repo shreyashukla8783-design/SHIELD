@@ -223,7 +223,7 @@ if (registerLocation) {
   // =========================
   // DEVIATION CHECK
   // =========================
-  
+
 const isDeviated =
   safeRoute.length > 0 &&
   deviationDistance !== null &&
@@ -342,8 +342,8 @@ const isDeviated =
 
   try {
     const response = await fetch(
-      "https://shield-backend-4uly.onrender.com/send-sos"
-      ,{
+      "https://shield-backend-4uly.onrender.com/send-sos",
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -356,12 +356,13 @@ const isDeviated =
     );
 
     const result = await response.json();
+    console.log("SOS SERVER RESPONSE:", result);
 
-    if (result.success) {
-      alert("SOS message sent successfully!");
-    } else {
-      alert("SOS failed: " + result.message);
-    }
+    if (response.ok && result.success) {
+  alert("SOS request accepted by server.");
+} else {
+  alert("SOS failed: " + (result.message || "Unknown server error"));
+}
   } catch (error) {
     console.error("SOS Error:", error);
     alert("Cannot connect to SHIELD server.");
