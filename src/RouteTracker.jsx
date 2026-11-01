@@ -361,6 +361,12 @@ const sendSOS = async () => {
     }
   };
 }, [registerSOS, emergencyContact, location]);
+// AUTOMATIC SOS ACTIVATION
+useEffect(() => {
+  if (sosReady) {
+    sendSOS();
+  }
+}, [sosReady]);
 
 
   // =========================
