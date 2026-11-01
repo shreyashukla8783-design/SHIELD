@@ -6,6 +6,7 @@ import "./App.css";
 
 function App() {
   const [sendSOSHandler, setSendSOSHandler] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(null);
   const [showRegister, setShowRegister] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [active, setActive] = useState("Dashboard");
@@ -231,7 +232,10 @@ function App() {
               </p>
             </div>
 
-           <RouteTracker registerSOS={setSendSOSHandler} />
+           <RouteTracker
+  registerSOS={setSendSOSHandler}
+  registerLocation={setCurrentLocation}
+/>
           </section>
         )}
 
@@ -256,16 +260,43 @@ function App() {
                 SHIELD detects a serious safety situation.
               </p>
 
-              <button
+             <button
   className="sos-button"
   onClick={() => sendSOSHandler?.()}
 >
   🚨 TEST SOS
 </button>
+
+<div style={{ marginTop: "20px" }}>
+  <h3>📍 Current Location</h3>
+
+  <p>
+    Your live location will appear in the Route Tracking section.
+  </p>
+
+  <button
+  onClick={() => {
+    if (!currentLocation) {
+      alert("Current location is not available yet.");
+      return;
+    }
+
+    window.open(
+      `https://www.google.com/maps?q=${currentLocation.latitude},${currentLocation.longitude}`,
+      "_blank"
+    );
+  }}
+>
+  📍 View My Live Location
+</button>
+</div>
             </div>
           
 
-            <RouteTracker registerSOS={setSendSOSHandler} />        
+            <RouteTracker
+  registerSOS={setSendSOSHandler}
+  registerLocation={setCurrentLocation}
+/>     
           </section>
         )}
 

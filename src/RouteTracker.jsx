@@ -67,7 +67,7 @@ function getNearestDistance(location, safeRoute) {
 
   return minimumDistance;
 }
-function RouteTracker({ registerSOS }) {
+function RouteTracker({ registerSOS, registerLocation }) {
   const [tracking, setTracking] = useState(false);
     const [emergencyName, setEmergencyName] = useState("");
   const [emergencyPhone, setEmergencyPhone] = useState("");
@@ -138,7 +138,12 @@ function RouteTracker({ registerSOS }) {
               new Date().toLocaleTimeString(),
           };
 
-          setLocation(newLocation);
+          console.log("GPS LOCATION:", newLocation);
+
+if (registerLocation) {
+  console.log("Sending location to App.jsx");
+  registerLocation(newLocation);
+}
 
           setRoute((previousRoute) => [
             ...previousRoute,
@@ -200,7 +205,7 @@ function RouteTracker({ registerSOS }) {
         watchId
       );
     };
-  }, [safeRoute]);
+  }, [safeRoute, registerLocation]);
 
   // =========================
   // CURRENT POSITION
@@ -250,9 +255,10 @@ function RouteTracker({ registerSOS }) {
     }
 
     if (!isDeviated) {
-      setWarningActive(false);
-      setCountdown(120);
-    }
+  setWarningActive(false);
+  setCountdown(120);
+  setSosReady(false);
+}
 
     return () => {
       if (timer) {
@@ -584,14 +590,29 @@ function RouteTracker({ registerSOS }) {
           )}
 
           {location && (
-            <p>
-              📍 Current Location:
-              <br />
-              {location.latitude.toFixed(6)},
-              {" "}
-              {location.longitude.toFixed(6)}
-            </p>
-          )}
+  <div>
+    <p>
+      📍 Current Location:
+      <br />
+      {location.latitude.toFixed(6)},
+      {" "}
+      {location.longitude.toFixed(6)}
+    </p>
+
+    <a
+      href={`https://www.google.com/maps?q=${location.latitude},${location.longitude}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        color: "white",
+        textDecoration: "underline",
+        fontWeight: "bold",
+      }}
+    >
+      📍 View Location on Google Maps
+    </a>
+  </div>
+)}
 
           <button
             onClick={() => {
