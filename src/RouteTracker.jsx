@@ -227,7 +227,7 @@ if (registerLocation) {
 const isDeviated =
   safeRoute.length > 0 &&
   deviationDistance !== null &&
-  deviationDistance >= 0;
+  deviationDistance >= 100;
 
   // =========================
   // SOS COUNTDOWN
