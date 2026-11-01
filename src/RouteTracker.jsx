@@ -320,7 +320,8 @@ const isDeviated =
   };
 
   // SEND SOS MESSAGE
-  const sendSOS = async () => {
+  
+const sendSOS = async () => {
   if (!emergencyContact) {
     alert("Please add an emergency contact first.");
     return;
@@ -334,40 +335,21 @@ const isDeviated =
   const locationLink =
     `https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
 
-  const message =
-    `SHIELD EMERGENCY ALERT\n\n` +
-    `The user needs a safety check.\n\n` +
-    `Last known location:\n${locationLink}\n\n` +
-    `Please contact the user.`;
+  alert(
+    "🛡️ SHIELD DEMO SOS ACTIVATED!\n\n" +
+    "Emergency Contact: " + emergencyContact.name +
+    "\nPhone: " + emergencyContact.phone +
+    "\n\nCurrent Location:\n" + locationLink +
+    "\n\nDemo Mode: No SMS has been sent."
+  );
 
-  try {
-    const response = await fetch(
-      "https://shield-backend-4uly.onrender.com/send-sos",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phone: emergencyContact.phone,
-          message: message,
-        }),
-      }
-    );
-
-    const result = await response.json();
-    console.log("SOS SERVER RESPONSE:", result);
-
-    if (response.ok && result.success) {
-  alert("SOS request accepted by server.");
-} else {
-  alert("SOS failed: " + (result.message || "Unknown server error"));
-}
-  } catch (error) {
-    console.error("SOS Error:", error);
-    alert("Cannot connect to SHIELD server.");
-  }
+  console.log("SHIELD DEMO SOS:", {
+    contact: emergencyContact.name,
+    location: locationLink,
+    status: "Demo only — SMS not sent"
+  });
 };
+
   useEffect(() => {
   if (registerSOS) {
     registerSOS(() => sendSOS);
