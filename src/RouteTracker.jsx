@@ -67,8 +67,7 @@ function getNearestDistance(location, safeRoute) {
 
   return minimumDistance;
 }
-
-function RouteTracker() {
+function RouteTracker({ registerSOS }) {
   const [tracking, setTracking] = useState(false);
     const [emergencyName, setEmergencyName] = useState("");
   const [emergencyPhone, setEmergencyPhone] = useState("");
@@ -276,10 +275,10 @@ function RouteTracker() {
 
     iconAnchor: [17, 17],
   });
-    // =========================
-  // SAVE EMERGENCY CONTACT
-  // =========================
+    
 
+  
+  // SAVE EMERGENCY CONTACT
   const saveEmergencyContact = () => {
     if (!emergencyName.trim() || !emergencyPhone.trim()) {
       alert("Please enter both name and phone number.");
@@ -297,30 +296,30 @@ function RouteTracker() {
     );
 
     setEmergencyContact(contact);
-
     setEmergencyName("");
     setEmergencyPhone("");
 
-    alert("✅ Emergency Contact saved!");
+    alert("Emergency Contact saved!");
   };
 
-  // =========================
   // DELETE EMERGENCY CONTACT
-  // =========================
-
   const deleteEmergencyContact = () => {
-      // =========================
-  // SEND SOS MESSAGE
-  // =========================
+    localStorage.removeItem("shieldEmergencyContact");
 
+    setEmergencyContact(null);
+
+    alert("Emergency Contact removed.");
+  };
+
+  // SEND SOS MESSAGE
   const sendSOS = () => {
     if (!emergencyContact) {
-      alert("⚠️ Please add an emergency contact first.");
+      alert("Please add an emergency contact first.");
       return;
     }
 
     if (!location) {
-      alert("⚠️ Current location is not available.");
+      alert("Current location is not available.");
       return;
     }
 
@@ -329,27 +328,31 @@ function RouteTracker() {
 
     const locationLink =
       `https://www.google.com/maps?q=${latitude},${longitude}`;
+      
 
     const message =
-      `🚨 SHIELD EMERGENCY ALERT 🚨\n\n` +
-      `I may need help. Please check my location.\n\n` +
-      `📍 My current location:\n` +
-      `${locationLink}\n\n` +
-      `Please contact me immediately.`;
+      `SHIELD EMERGENCY ALERT\n\n` +
+      `The user needs a safety check.\n\n` +
+      `Last known location:\n${locationLink}\n\n` +
+      `Please contact the user.`;
 
     const smsUrl =
       `sms:${emergencyContact.phone}?body=${encodeURIComponent(message)}`;
 
     window.location.href = smsUrl;
   };
-    localStorage.removeItem(
-      "shieldEmergencyContact"
-    );
+  useEffect(() => {
+  if (registerSOS) {
+    registerSOS(() => sendSOS);
+  }
 
-    setEmergencyContact(null);
-
-    alert("Emergency Contact removed.");
+  return () => {
+    if (registerSOS) {
+      registerSOS(null);
+    }
   };
+}, [registerSOS, emergencyContact, location]);
+
 
   // =========================
   // SAVE SAFE ROUTE

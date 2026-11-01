@@ -1,62 +1,100 @@
+import React, { useState } from "react";
 import RouteTracker from "./RouteTracker";
 import Register from "./Register";
 import Login from "./Login";
-import React, { useState } from "react";
 import "./App.css";
 
 function App() {
+  const [sendSOSHandler, setSendSOSHandler] = useState(null);
   const [showRegister, setShowRegister] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [active, setActive] = useState("Dashboard");
   const [scanning, setScanning] = useState(false);
 
   const menu = [
-    "Dashboard",
-    "Threat Detection",
-    "Security Alerts",
-    "AI Assistant",
-    "Analytics",
-    "Settings",
+    { name: "Dashboard", icon: "🏠" },
+    { name: "Safe Route", icon: "🗺️" },
+    { name: "Emergency", icon: "🚨" },
+    { name: "AI Assistant", icon: "🤖" },
+    { name: "Analytics", icon: "📊" },
+    { name: "Settings", icon: "⚙️" },
   ];
 
   const alerts = [
-    { name: "Suspicious Login Attempt", level: "HIGH", time: "2 min ago" },
-    { name: "Unusual Network Activity", level: "MEDIUM", time: "15 min ago" },
-    { name: "Firewall Rule Updated", level: "LOW", time: "1 hour ago" },
+    {
+      name: "Route monitoring active",
+      level: "SAFE",
+      time: "Now",
+    },
+    {
+      name: "Emergency contact connected",
+      level: "SAFE",
+      time: "Today",
+    },
+    {
+      name: "Location services active",
+      level: "INFO",
+      time: "Today",
+    },
   ];
+
   if (!isLoggedIn) {
-  return (
-    <Login
-      onLogin={(email) => {
-        setIsLoggedIn(true);
-      }}
-      onRegister={() => {
-        alert("Registration feature coming next!");
-      }}
-    />
-  );
-}
+    if (showRegister) {
+      return (
+        <Register
+          onRegister={() => {
+            setShowRegister(false);
+            alert("Account created successfully. Please sign in.");
+          }}
+          onLogin={() => setShowRegister(false)}
+        />
+      );
+    }
+
+    return (
+      <Login
+        onLogin={() => {
+          setIsLoggedIn(true);
+        }}
+        onRegister={() => {
+          setShowRegister(true);
+        }}
+      />
+    );
+  }
+
+  const handleScan = () => {
+    setScanning(true);
+
+    setTimeout(() => {
+      setScanning(false);
+      alert("SHIELD safety scan completed. Your system is secure.");
+    }, 2000);
+  };
 
   return (
     <div className="app">
-      <RouteTracker />
       <aside className="sidebar">
-        <h2 className="logo">🛡 SHIELD</h2>
-        <p className="side-label">MAIN MENU</p>
+        <h2 className="logo">🛡️ SHIELD</h2>
+
+        <p className="side-label">SAFETY CENTER</p>
 
         {menu.map((item) => (
           <button
-            key={item}
-            className={`menu-item ${active === item ? "selected" : ""}`}
-            onClick={() => setActive(item)}
+            key={item.name}
+            className={`menu-item ${
+              active === item.name ? "selected" : ""
+            }`}
+            onClick={() => setActive(item.name)}
           >
-            {item}
+            <span>{item.icon}</span>
+            {item.name}
           </button>
         ))}
 
         <div className="sidebar-bottom">
           <span className="online-dot"></span>
-          System Online
+          Protection Active
         </div>
       </aside>
 
@@ -64,90 +102,289 @@ function App() {
         <header className="topbar">
           <div>
             <h2>{active}</h2>
-            <p>Welcome to your intelligent security center.</p>
+            <p>Your personal safety and protection center.</p>
           </div>
-          <div className="profile">Admin</div>
+
+          <div className="profile">
+            <span className="profile-dot"></span>
+            User
+          </div>
         </header>
 
-        <section className="welcome">
-          <div>
-            <span className="tag">AI SECURITY PLATFORM</span>
-            <h1>Stay Protected.<br />Stay Ahead.</h1>
-            <p>
-              Monitor threats, detect suspicious activity
-              and manage your security with SHIELD AI.
-            </p>
-            <button
-              className="scan-btn"
-              disabled={scanning}
-              onClick={() => {
-                setScanning(true);
-                setTimeout(() => setScanning(false), 2000);
-              }}
-            >
-              {scanning ? "Scanning..." : "Run Security Scan →"}
-            </button>
-          </div>
-          <div className="shield-icon">🛡️</div>
-        </section>
+        {active === "Dashboard" && (
+          <>
+            <section className="welcome">
+              <div>
+                <span className="tag">PERSONAL SAFETY PLATFORM</span>
 
-        <h2 className="section-title">Security Overview</h2>
+                <h1>
+                  Stay Safe.
+                  <br />
+                  Stay Protected.
+                </h1>
 
-        <section className="stats">
-          <div className="stat-card">
-            <span>Threats Detected</span>
-            <h2>24</h2>
-            <small className="red">↑ 4 this week</small>
-          </div>
-          <div className="stat-card">
-            <span>System Protection</span>
-            <h2>98.5%</h2>
-            <small className="green">Protection status: Demo</small>
-          </div>
-          <div className="stat-card">
-            <span>Active Devices</span>
-            <h2>12</h2>
-            <small>Demo device count</small>
-          </div>
-          <div className="stat-card">
-            <span>Security Score</span>
-            <h2>92/100</h2>
-            <small className="green">Demo score</small>
-          </div>
-        </section>
+                <p>
+                  SHIELD helps you monitor your journey, protect your
+                  safe route and respond quickly during emergencies.
+                </p>
 
-        <section className="bottom-grid">
-          <div className="panel">
-            <h3>Recent Security Alerts</h3>
-            {alerts.map((alert, index) => (
-              <div className="alert" key={index}>
-                <div>
-                  <strong>{alert.name}</strong>
-                  <p>{alert.time}</p>
-                </div>
-                <span className={`level ${alert.level.toLowerCase()}`}>
-                  {alert.level}
-                </span>
+                <button
+                  className="scan-btn"
+                  disabled={scanning}
+                  onClick={handleScan}
+                >
+                  {scanning ? "Checking Safety..." : "Check My Safety →"}
+                </button>
               </div>
-            ))}
-          </div>
 
-          <div className="panel ai-panel">
-            <div className="ai-circle">✦</div>
-            <h3>SHIELD AI Assistant</h3>
-            <p>
-              Your AI security assistant is ready to help
-              you understand security risks.
-            </p>
-            <button onClick={() => setActive("AI Assistant")}>
-              Open AI Assistant →
-            </button>
-          </div>
-        </section>
+              <div className="shield-icon">🛡️</div>
+            </section>
+
+            <h2 className="section-title">Safety Overview</h2>
+
+            <section className="stats">
+              <div className="stat-card">
+                <span>🛡️ Protection Status</span>
+                <h2>ACTIVE</h2>
+                <small className="green">
+                  SHIELD protection is enabled
+                </small>
+              </div>
+
+              <div className="stat-card">
+                <span>📍 Location Tracking</span>
+                <h2>ON</h2>
+                <small className="green">
+                  Location monitoring available
+                </small>
+              </div>
+
+              <div className="stat-card">
+                <span>🚨 Emergency Contact</span>
+                <h2>READY</h2>
+                <small>
+                  Emergency contact can be configured
+                </small>
+              </div>
+
+              <div className="stat-card">
+                <span>🗺️ Safe Route</span>
+                <h2>MONITORING</h2>
+                <small className="green">
+                  Route protection available
+                </small>
+              </div>
+            </section>
+
+            <section className="bottom-grid">
+              <div className="panel">
+                <h3>Safety Activity</h3>
+
+                {alerts.map((alert, index) => (
+                  <div className="alert" key={index}>
+                    <div>
+                      <strong>{alert.name}</strong>
+                      <p>{alert.time}</p>
+                    </div>
+
+                    <span
+                      className={`level ${
+                        alert.level === "SAFE"
+                          ? "low"
+                          : "medium"
+                      }`}
+                    >
+                      {alert.level}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="panel ai-panel">
+                <div className="ai-circle">✦</div>
+
+                <h3>SHIELD AI Assistant</h3>
+
+                <p>
+                  Get safety guidance, emergency instructions
+                  and help understanding your SHIELD alerts.
+                </p>
+
+                <button
+                  onClick={() => setActive("AI Assistant")}
+                >
+                  Open AI Assistant →
+                </button>
+              </div>
+            </section>
+          </>
+        )}
+
+        {active === "Safe Route" && (
+          <section className="page-section">
+            <div className="page-heading">
+              <span className="tag">LIVE PROTECTION</span>
+              <h1>Safe Route</h1>
+              <p>
+                Monitor your current location and compare your
+                journey with your saved safe route.
+              </p>
+            </div>
+
+           <RouteTracker registerSOS={setSendSOSHandler} />
+          </section>
+        )}
+
+        {active === "Emergency" && (
+          <section className="page-section emergency-page">
+            <div className="page-heading">
+              <span className="tag">EMERGENCY CENTER</span>
+              <h1>Emergency Protection</h1>
+              <p>
+                Configure your emergency contact and prepare
+                SHIELD for emergency situations.
+              </p>
+            </div>
+
+            <div className="emergency-card">
+              <div className="emergency-icon">🚨</div>
+
+              <h2>Emergency Contact</h2>
+
+              <p>
+                Your emergency contact will be used when
+                SHIELD detects a serious safety situation.
+              </p>
+
+              <button
+  className="sos-button"
+  onClick={() => sendSOSHandler?.()}
+>
+  🚨 TEST SOS
+</button>
+            </div>
+          
+
+            <RouteTracker registerSOS={setSendSOSHandler} />        
+          </section>
+        )}
+
+        {active === "AI Assistant" && (
+          <section className="page-section">
+            <div className="page-heading">
+              <span className="tag">SHIELD AI</span>
+              <h1>AI Safety Assistant</h1>
+              <p>
+                Your personal assistant for safety guidance and
+                emergency preparation.
+              </p>
+            </div>
+
+            <div className="assistant-card">
+              <div className="ai-circle">✦</div>
+              <h2>Hello! I'm SHIELD AI.</h2>
+              <p>
+                I can help you understand your safety status,
+                route alerts and emergency procedures.
+              </p>
+
+              <button
+                onClick={() =>
+                  alert(
+                    "AI Assistant features will be connected here."
+                  )
+                }
+              >
+                Start Assistant →
+              </button>
+            </div>
+          </section>
+        )}
+
+        {active === "Analytics" && (
+          <section className="page-section">
+            <div className="page-heading">
+              <span className="tag">SAFETY ANALYTICS</span>
+              <h1>Your Safety Analytics</h1>
+              <p>
+                View your route activity and safety information.
+              </p>
+            </div>
+
+            <div className="analytics-grid">
+              <div className="stat-card">
+                <span>Routes Monitored</span>
+                <h2>0</h2>
+                <small>Waiting for route activity</small>
+              </div>
+
+              <div className="stat-card">
+                <span>Route Deviations</span>
+                <h2>0</h2>
+                <small className="green">
+                  No deviations recorded
+                </small>
+              </div>
+
+              <div className="stat-card">
+                <span>Safety Checks</span>
+                <h2>0</h2>
+                <small>Activity will appear here</small>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {active === "Settings" && (
+          <section className="page-section">
+            <div className="page-heading">
+              <span className="tag">ACCOUNT SETTINGS</span>
+              <h1>Settings</h1>
+              <p>
+                Manage your SHIELD account and safety preferences.
+              </p>
+            </div>
+
+            <div className="settings-card">
+              <div className="setting-row">
+                <div>
+                  <h3>Location Services</h3>
+                  <p>
+                    Allow SHIELD to access your current location.
+                  </p>
+                </div>
+
+                <span className="setting-status">ON</span>
+              </div>
+
+              <div className="setting-row">
+                <div>
+                  <h3>Route Monitoring</h3>
+                  <p>
+                    Monitor your journey for unexpected deviations.
+                  </p>
+                </div>
+
+                <span className="setting-status">ON</span>
+              </div>
+
+              <div className="setting-row">
+                <div>
+                  <h3>Emergency Protection</h3>
+                  <p>
+                    Configure emergency contacts and SOS options.
+                  </p>
+                </div>
+
+                <span className="setting-status">READY</span>
+              </div>
+            </div>
+          </section>
+        )}
 
         <footer>
-          SHIELD © 2026 | AI-Powered Security Platform
-          <span>Frontend Demo</span>
+          SHIELD © 2026 | Personal Safety Platform
+          <span>Prototype</span>
         </footer>
       </main>
     </div>

@@ -1,8 +1,11 @@
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -16,13 +19,25 @@ button {
   font-family: inherit;
 }
 
+button:disabled {
+  cursor: not-allowed;
+}
+
 .app {
   display: flex;
   min-height: 100vh;
+  width: 100%;
+  background: #090d19;
 }
+
+/* =========================
+   SIDEBAR
+========================= */
 
 .sidebar {
   width: 245px;
+  min-width: 245px;
+  min-height: 100vh;
   background: #101629;
   border-right: 1px solid #222d43;
   padding: 30px 18px;
@@ -44,6 +59,7 @@ button {
 }
 
 .menu-item {
+  width: 100%;
   background: transparent;
   border: none;
   color: #aab4c8;
@@ -52,6 +68,11 @@ button {
   margin-bottom: 7px;
   border-radius: 9px;
   font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.menu-item span {
+  margin-right: 8px;
 }
 
 .menu-item:hover,
@@ -76,10 +97,15 @@ button {
   margin-right: 8px;
 }
 
+/* =========================
+   MAIN
+========================= */
+
 .main {
   flex: 1;
   padding: 30px;
   min-width: 0;
+  overflow-x: hidden;
 }
 
 .topbar {
@@ -87,15 +113,16 @@ button {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
+  gap: 20px;
 }
 
 .topbar h2 {
   font-size: 23px;
+  color: #f8fafc;
 }
 
-.topbar p,
-.welcome p {
-  color: #929db2;
+.topbar p {
+  color: #cbd5e1;
   margin-top: 8px;
   line-height: 1.6;
 }
@@ -104,7 +131,21 @@ button {
   background: #242c43;
   padding: 12px 20px;
   border-radius: 10px;
+  white-space: nowrap;
 }
+
+.profile-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #22c55e;
+  border-radius: 50%;
+  margin-right: 7px;
+}
+
+/* =========================
+   WELCOME
+========================= */
 
 .welcome {
   background: linear-gradient(120deg, #211744, #111c37);
@@ -115,6 +156,7 @@ button {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 35px;
+  min-height: 280px;
 }
 
 .tag {
@@ -124,13 +166,17 @@ button {
 }
 
 .welcome h1 {
+  color: #f8fafc;
   font-size: 38px;
   margin-top: 15px;
   line-height: 1.2;
 }
 
 .welcome p {
-  max-width: 440px;
+  color: #cbd5e1;
+  max-width: 500px;
+  margin-top: 12px;
+  line-height: 1.6;
 }
 
 .shield-icon {
@@ -146,10 +192,12 @@ button {
   padding: 14px 20px;
   margin-top: 22px;
   font-weight: bold;
+  transition: 0.2s ease;
 }
 
 .scan-btn:hover {
   background: #7c3aed;
+  transform: translateY(-1px);
 }
 
 .scan-btn:disabled {
@@ -157,7 +205,12 @@ button {
   cursor: wait;
 }
 
+/* =========================
+   DASHBOARD STATS
+========================= */
+
 .section-title {
+  color: #f8fafc;
   font-size: 19px;
   margin-bottom: 20px;
 }
@@ -176,15 +229,25 @@ button {
   border-radius: 13px;
 }
 
-.stat-card span,
+.stat-card {
+  min-width: 0;
+}
+
+.stat-card span {
+  color: #98a4ba;
+  font-size: 13px;
+}
+
 .stat-card small {
   color: #98a4ba;
   font-size: 13px;
 }
 
 .stat-card h2 {
+  color: #f8fafc;
   font-size: 28px;
   margin: 18px 0 10px;
+  word-break: break-word;
 }
 
 .green {
@@ -195,6 +258,10 @@ button {
   color: #fb7185 !important;
 }
 
+/* =========================
+   BOTTOM PANELS
+========================= */
+
 .bottom-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -203,6 +270,7 @@ button {
 }
 
 .panel h3 {
+  color: #f8fafc;
   margin-bottom: 20px;
 }
 
@@ -220,6 +288,7 @@ button {
 }
 
 .alert strong {
+  color: #f8fafc;
   font-size: 13px;
 }
 
@@ -233,6 +302,7 @@ button {
   font-size: 10px;
   padding: 7px 10px;
   border-radius: 5px;
+  white-space: nowrap;
 }
 
 .high {
@@ -249,6 +319,10 @@ button {
   background: #163c34;
   color: #4ade80;
 }
+
+/* =========================
+   AI PANEL
+========================= */
 
 .ai-panel {
   text-align: center;
@@ -272,14 +346,211 @@ button {
   font-size: 14px;
 }
 
-.ai-panel button {
+.ai-panel button,
+.assistant-card button {
   background: #30245b;
   color: #c4b5fd;
   border: 1px solid #6245a0;
   border-radius: 8px;
   padding: 12px 18px;
   margin-top: 20px;
+  transition: 0.2s ease;
 }
+
+.ai-panel button:hover,
+.assistant-card button:hover {
+  background: #3d2d70;
+}
+
+/* =========================
+   INNER PAGES
+========================= */
+
+.page-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.page-heading h1 {
+  color: #f8fafc !important;
+  font-size: 36px;
+  margin-top: 12px;
+  line-height: 1.2;
+}
+
+.page-heading p {
+  color: #cbd5e1 !important;
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
+/* =========================
+   SAFE ROUTE
+========================= */
+
+.page-section .leaflet-container {
+  border-radius: 14px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.page-section > div {
+  min-width: 0;
+}
+
+/* =========================
+   EMERGENCY
+========================= */
+
+.emergency-page {
+  padding-bottom: 30px;
+}
+
+.emergency-card {
+  max-width: 650px;
+  margin: 0 auto;
+  background: linear-gradient(145deg, #171c30, #111628);
+  border: 1px solid #5b2940;
+  border-radius: 18px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+}
+
+.emergency-icon {
+  width: 75px;
+  height: 75px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 20px;
+  background: #4c1d2c;
+  border-radius: 50%;
+  font-size: 35px;
+}
+
+.emergency-card h2 {
+  color: #f8fafc;
+  margin-bottom: 12px;
+}
+
+.emergency-card p {
+  color: #aab4c8;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.sos-button {
+  margin-top: 28px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  padding: 14px 28px;
+  font-weight: bold;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.sos-button:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+/* =========================
+   AI ASSISTANT
+========================= */
+
+.assistant-card {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #121a2d;
+  border: 1px solid #26324b;
+  border-radius: 18px;
+  padding: 45px 30px;
+  text-align: center;
+}
+
+.assistant-card h2 {
+  color: #f8fafc;
+  margin-top: 10px;
+}
+
+.assistant-card p {
+  color: #aab4c8;
+  max-width: 520px;
+  margin: 14px auto 0;
+  line-height: 1.7;
+}
+
+/* =========================
+   ANALYTICS
+========================= */
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+.settings-card {
+  max-width: 850px;
+  margin: 0 auto;
+  background: #121a2d;
+  border: 1px solid #26324b;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 23px;
+  border-bottom: 1px solid #26324b;
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-row h3 {
+  color: #f8fafc;
+  font-size: 15px;
+}
+
+.setting-row p {
+  color: #929db2;
+  font-size: 13px;
+  margin-top: 7px;
+  line-height: 1.5;
+}
+
+.setting-status {
+  background: #163c34;
+  color: #4ade80;
+  border: 1px solid #235c4d;
+  padding: 7px 12px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* =========================
+   FOOTER
+========================= */
 
 footer {
   color: #77839b;
@@ -287,24 +558,73 @@ footer {
   display: flex;
   justify-content: space-between;
   margin-top: 35px;
+  padding-bottom: 10px;
 }
 
-@media (max-width: 1000px) {
+footer span {
+  color: #626f86;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
   .stats {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .analytics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .sidebar {
+    width: 190px;
+    min-width: 190px;
+  }
+
+  .main {
+    padding: 20px;
+  }
+
+  .welcome {
+    padding: 28px;
+  }
+
+  .welcome h1 {
+    font-size: 32px;
+  }
+
+  .shield-icon {
+    font-size: 75px;
   }
 }
 
 @media (max-width: 650px) {
+  .app {
+    display: block;
+  }
+
   .sidebar {
-    width: 75px;
-    padding: 20px 8px;
+    width: 100%;
+    min-width: 100%;
+    min-height: auto;
+    padding: 12px 10px;
+    border-right: none;
+    border-bottom: 1px solid #222d43;
+    display: block;
   }
 
   .logo {
-    font-size: 12px;
-    writing-mode: vertical-rl;
-    margin-bottom: 25px;
+    font-size: 20px;
+    margin: 0 0 12px;
+    text-align: center;
   }
 
   .side-label,
@@ -313,21 +633,56 @@ footer {
   }
 
   .menu-item {
+    width: auto;
+    display: inline-block;
     font-size: 0;
     text-align: center;
-    padding: 12px 2px;
+    padding: 10px;
+    margin: 2px;
   }
 
-  .menu-item::first-letter {
-    font-size: 16px;
+  .menu-item span {
+    margin: 0;
+    font-size: 17px;
   }
 
   .main {
     padding: 15px;
+    width: 100%;
+  }
+
+  .topbar {
+    margin-bottom: 20px;
+  }
+
+  .topbar h2 {
+    font-size: 19px;
+  }
+
+  .topbar p {
+    font-size: 12px;
+  }
+
+  .profile {
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+
+  .welcome {
+    padding: 25px 20px;
+    min-height: auto;
+    display: block;
+    text-align: center;
   }
 
   .welcome h1 {
     font-size: 28px;
+  }
+
+  .welcome p {
+    font-size: 14px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .shield-icon {
@@ -335,12 +690,31 @@ footer {
   }
 
   .stats,
-  .bottom-grid {
+  .bottom-grid,
+  .analytics-grid {
     grid-template-columns: 1fr;
   }
 
-  .topbar {
-    gap: 10px;
+  .stat-card {
+    padding: 20px;
+  }
+
+  .page-heading h1 {
+    font-size: 28px;
+  }
+
+  .page-heading p {
+    font-size: 14px;
+  }
+
+  .emergency-card,
+  .assistant-card {
+    padding: 30px 20px;
+  }
+
+  .setting-row {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   footer {
@@ -349,17 +723,36 @@ footer {
   }
 }
 
-/* SHIELD text visibility fix */
+/* =========================
+   SMALL PHONE
+========================= */
 
-.topbar h2,
-.welcome h1,
-.section-title,
-.panel h3,
-.stat-card h2 {
-  color: #f8fafc;
-}
+@media (max-width: 400px) {
+  .main {
+    padding: 10px;
+  }
 
-.welcome p,
-.topbar p {
-  color: #cbd5e1;
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .topbar p {
+    display: none;
+  }
+
+  .welcome h1 {
+    font-size: 25px;
+  }
+
+  .section-title {
+    font-size: 17px;
+  }
+
+  .stat-card h2 {
+    font-size: 24px;
+  }
+
+  .page-heading h1 {
+    font-size: 25px;
+  }
 }
